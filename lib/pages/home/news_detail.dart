@@ -21,7 +21,7 @@ class _NewsDetailState extends State<NewsDetail> {
           child: Row(
             children: [
               Container(width: 4, color: Colors.redAccent, height: 40, margin: EdgeInsets.only(right: 15),),
-              Expanded(child: Text('${widget.news['infotitle']}', maxLines: 2, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),))
+              Expanded(child: Text('${widget.news['infotitle']}', maxLines: 2, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),))
             ],
           ),
         ),
@@ -32,13 +32,16 @@ class _NewsDetailState extends State<NewsDetail> {
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.all(15),
-            child: Text('${widget.news['content']}', style: TextStyle(fontSize: 15),),
+            child: Text('${widget.news['content']}', style: TextStyle(fontSize: 18),),
           ),
         ),
       ),
       bottomNavigationBar: Container(
-        height: 40,
-        color: Color.fromRGBO(240, 240, 240, 1),
+        height: 45,
+        decoration: BoxDecoration(
+            color: Color.fromRGBO(240, 240, 240, 1),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5))
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
