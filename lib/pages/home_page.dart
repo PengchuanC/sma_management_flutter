@@ -62,13 +62,13 @@ class _HomePageState extends State<HomePage>
               indicatorColor: Colors.redAccent,
               labelColor: Colors.redAccent,
               labelStyle: TextStyle(
-                fontSize: ScreenUtil().setSp(18),
+                fontSize: ScreenUtil().setSp(24),
                 color: Colors.redAccent,
                 fontWeight: FontWeight.bold,
               ),
               unselectedLabelColor: Color(0xffAAAAAA),
               unselectedLabelStyle: TextStyle(
-                fontSize: ScreenUtil().setSp(14),
+                fontSize: ScreenUtil().setSp(18),
                 color: Color(0xffAAAAAA),
               ),
               indicatorSize: TabBarIndicatorSize.label,
@@ -148,8 +148,8 @@ class _NewsTabViewState extends State<NewsTabView>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(_news[idx]['infotitle'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                        Text(_news[idx]['content'].toString().trim().replaceAll(new RegExp(r"(\s+\b|\b\s|\t|\n)"), ""), maxLines: 4, overflow: TextOverflow.ellipsis,),
+                        Text(_news[idx]['infotitle'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
+                        Text(_news[idx]['content'].toString().trim().replaceAll(new RegExp(r"(\s+\b|\b\s|\t|\n)"), ""), maxLines: 4, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15),),
                         Row(
                           children: [
                             Text(_news[idx]['media'], style: TextStyle(fontSize: 12, color: Colors.black87),),

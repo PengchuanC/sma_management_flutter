@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:sma_management/theme/iconfont.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsDetail extends StatefulWidget {
   final dynamic news;
@@ -42,7 +43,29 @@ class _NewsDetailState extends State<NewsDetail> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(icon: Icon(Icons.arrow_back), onPressed: (){Navigator.pop(context);}),
-            IconButton(icon: Icon(Icons.share_rounded), onPressed: (){})
+            Container(
+              width: 100,
+              child: Row(
+                children: [
+                  IconButton(icon: Icon(Iconfont.wechat), onPressed: () async {
+                    String url = 'wexin://';
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  }),
+                  IconButton(icon: Icon(Iconfont.browser), onPressed: () async {
+                    String url = widget.news['linkaddress'];
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  })
+                ],
+              ),
+            )
           ],
         ),
       ),

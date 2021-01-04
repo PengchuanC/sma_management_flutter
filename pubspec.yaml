@@ -37,6 +37,7 @@ dependencies:
   dio: ^3.0.10
   skeleton_text: ^1.0.0
   loading: ^1.0.2
+  url_launcher: ^5.7.10
 
 dev_dependencies:
   flutter_test:
@@ -69,14 +70,15 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
+  fonts:
+    #   - family: Schyler
+    #     fonts:
+    #       - asset: fonts/Schyler-Regular.ttf
+    #       - asset: fonts/Schyler-Italic.ttf
+    #         style: italic
+    - family: iconfont
+      fonts:
+        - asset: assets/fonts/iconfont.ttf
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
