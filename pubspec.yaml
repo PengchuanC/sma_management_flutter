@@ -36,6 +36,7 @@ dependencies:
   flutter_screenutil: ^4.0.2+1
   dio: ^3.0.10
   skeleton_text: ^1.0.0
+  loading: ^1.0.2
 
 dev_dependencies:
   flutter_test:

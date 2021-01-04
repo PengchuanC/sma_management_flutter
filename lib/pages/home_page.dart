@@ -1,8 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:loading/indicator/ball_pulse_indicator.dart';
+import 'package:loading/loading.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:sma_management/http/news.dart';
+import 'package:sma_management/pages/home/news_detail.dart';
+import 'package:sma_management/utils/dash.dart';
 
 final sector = <String>['要闻', '宏观', '证券市场', '股票', '基金', '私募', '国际'];
 
@@ -108,63 +114,76 @@ class NewsTabView extends StatefulWidget {
 class _NewsTabViewState extends State<NewsTabView>
     with AutomaticKeepAliveClientMixin {
   ScrollController scrollController = new ScrollController();
+  StreamController<List<dynamic>> streamController;
   int _page = 1;
-  List _news = [];
   bool loading = false;
+  List _news = [];
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      child: _news.length == 0?
-      Center(
-        child: skeleton,
-      ):
-      ListView.builder(
-        itemBuilder: (ctx, idx){
-          return InkWell(
-            onTap: (){
-              print("Clicked $idx");
-            },
-            child: Container(
-              width: double.infinity,
-              margin: EdgeInsets.only(left: 20, right: 20, bottom: 5, top: 5),
-              color: Color.fromRGBO(250, 250, 250, 1),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(_news[idx]['infotitle'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                  Text(_news[idx]['content'].toString().trim().replaceAll(new RegExp(r"(\s+\b|\b\s|\t|\n)"), ""), maxLines: 4, overflow: TextOverflow.ellipsis,),
-                  Row(
-                    children: [
-                      Text(_news[idx]['media'], style: TextStyle(fontSize: 12, color: Colors.black87),),
-                      Container(width: 10,),
-                      Text(_news[idx]['infopubldate'], style: TextStyle(fontSize: 12, color: Colors.black87)),
-                      Container(width: 5,),
-                      Text(_news[idx]['infopubltime'], style: TextStyle(fontSize: 12, color: Colors.black87)),
-                    ],
+      child: StreamBuilder(
+        stream: streamController.stream,
+          builder: (context, snapshot){
+            List<dynamic> data = snapshot.data;
+            if (data == null) {
+              return Center(
+                child: skeleton,
+              );
+            }
+            _news.addAll(data);
+            return ListView.builder(
+              itemBuilder: (ctx, idx){
+                return InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return NewsDetail(news: _news[idx]);
+                    }));
+                  },
+                  child: idx != _news.length ? Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.only(left: 20, right: 20, bottom: 5, top: 5),
+                    color: Color.fromRGBO(250, 250, 250, 1),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(_news[idx]['infotitle'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                        Text(_news[idx]['content'].toString().trim().replaceAll(new RegExp(r"(\s+\b|\b\s|\t|\n)"), ""), maxLines: 4, overflow: TextOverflow.ellipsis,),
+                        Row(
+                          children: [
+                            Text(_news[idx]['media'], style: TextStyle(fontSize: 12, color: Colors.black87),),
+                            Container(width: 10,),
+                            Text(_news[idx]['infopubldate'], style: TextStyle(fontSize: 12, color: Colors.black87)),
+                            Container(width: 5,),
+                            Text(_news[idx]['infopubltime'], style: TextStyle(fontSize: 12, color: Colors.black87)),
+                          ],
+                        ),
+                        Container(
+                          height: 2,
+                          color: Colors.black12,
+                          margin: EdgeInsets.only(top: 5),
+                        )
+                      ],
+                    ),
+                  ): loading? Text(''): Center(
+                    child: Loading(indicator: BallPulseIndicator(), size: 20.0, color: Colors.redAccent),
                   ),
-                  Container(
-                    height: 2,
-                    color: Colors.black12,
-                    margin: EdgeInsets.only(top: 5),
-                  )
-                ],
-              ),
-            ),
-            splashColor: Colors.redAccent.withOpacity(0.1),
-            highlightColor: Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-          );
-        },
-        itemCount: _news.length,
-        controller: scrollController,
-        physics: AlwaysScrollableScrollPhysics(),
+                  splashColor: Colors.redAccent.withOpacity(0.1),
+                  highlightColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                );
+              },
+              itemCount: _news.length + 1,
+              controller: scrollController,
+              physics: AlwaysScrollableScrollPhysics(),
+            );
+          }
       ),
       onRefresh: () async {
-        _news = [];
         _page = 1;
-        _getNews();
+        List<dynamic> data = await _getNews();
+        streamController.sink.add(data);
       },
     );
   }
@@ -172,10 +191,11 @@ class _NewsTabViewState extends State<NewsTabView>
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, _getNews);
+    streamController = StreamController();
+    _getNews();
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent - 200) {
+          scrollController.position.maxScrollExtent - 20) {
           _getNews();
       }
     });
@@ -185,10 +205,8 @@ class _NewsTabViewState extends State<NewsTabView>
     if (!loading){
       loading = true;
       var ret = await getNews(widget.category, _page);
-      setState(() {
-        _news.addAll(ret);
-        _page ++;
-      });
+      streamController.sink.add(ret);
+      _page++;
       loading = false;
       return ret;
     }
@@ -199,9 +217,10 @@ class _NewsTabViewState extends State<NewsTabView>
 
   @override
   void dispose() {
+    super.dispose();
     loading = true;
     scrollController.dispose();
-    super.dispose();
+    streamController.close();
   }
 }
 

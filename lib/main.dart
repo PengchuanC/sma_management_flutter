@@ -29,11 +29,11 @@ class MyApp extends StatelessWidget {
           return ScreenUtilInit(
             child: MaterialApp(
               theme: ThemeData(
-                primarySwatch: Colors.blue,
+                primarySwatch: Colors.red,
                 primaryColor: Colors.white,
                 visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
-              home: BottomNavBar(title: 'Flutter Demo',),
+              home: BottomNavBar(title: 'News',),
             )
           );
         },
