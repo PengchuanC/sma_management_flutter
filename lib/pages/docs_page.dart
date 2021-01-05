@@ -1,3 +1,4 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -32,6 +33,7 @@ class _DocsPageState extends State<DocsPage> {
         color: Colors.black12,
         child: ListView(
           children: [
+            flare,
             ...docs.map((e) => docCard(context, e['title'], e['content'])),
           ],
         ),
@@ -75,3 +77,17 @@ Widget docCard(BuildContext context, String title, String content) {
   );
   return card;
 }
+
+Widget flare = Container(
+  height: 180,
+  width: double.infinity,
+  margin: EdgeInsets.only(left: 20, right: 20, top: 10),
+  decoration: BoxDecoration(
+      color: white,
+      borderRadius: BorderRadius.all(Radius.circular(15))
+  ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.all(Radius.circular(15)),
+    child: FlareActor("assets/flare/sun.flr", alignment:Alignment.center, fit:BoxFit.fitWidth, animation:"Sun Rotate"),
+  ),
+);

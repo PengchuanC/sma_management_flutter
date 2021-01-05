@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,7 +34,13 @@ class MyApp extends StatelessWidget {
                 primaryColor: Colors.white,
                 visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
-              home: BottomNavBar(title: 'News',),
+              home: SplashScreen.navigate(
+                name: 'assets/flare/splash.flr',
+                next: (context) => BottomNavBar(title: 'News',),
+                until: () => Future.delayed(Duration(seconds: 2)),
+                startAnimation: 'Sun Rotate',
+              ),
+              // home: BottomNavBar(title: 'News',),
             )
           );
         },

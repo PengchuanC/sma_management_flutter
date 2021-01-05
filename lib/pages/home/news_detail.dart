@@ -1,4 +1,6 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:sma_management/theme/iconfont.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,6 +14,8 @@ class NewsDetail extends StatefulWidget {
 }
 
 class _NewsDetailState extends State<NewsDetail> {
+  bool _like = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,11 +31,29 @@ class _NewsDetailState extends State<NewsDetail> {
         ),
         elevation: 0,
         backgroundColor: Color.fromRGBO(250, 250, 250, 1),
+        actions: [
+          GestureDetector(
+            child: Container(
+              height: 40,
+              width: 40,
+              child: _like? FlareActor(
+                'assets/flare/like.flr',
+                animation: 'Like',
+                fit: BoxFit.contain,
+              ): Icon(Ionicons.heart_outline),
+            ),
+            onTap: (){
+              setState(() {
+                _like = !_like;
+              });
+            },
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 0),
             child: Text('${widget.news['content']}', style: TextStyle(fontSize: 18),),
           ),
         ),
@@ -45,7 +67,7 @@ class _NewsDetailState extends State<NewsDetail> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(icon: Icon(Icons.arrow_back), onPressed: (){Navigator.pop(context);}),
+            IconButton(icon: Icon(Icons.arrow_back), onPressed: ()=>Navigator.pop(context)),
             Container(
               width: 100,
               child: Row(

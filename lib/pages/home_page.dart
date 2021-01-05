@@ -224,6 +224,7 @@ class _NewsTabViewState extends State<NewsTabView>
   }
 }
 
+// 新闻骨架
 Widget skeleton =  ListView.builder(
     scrollDirection: Axis.vertical,
     physics: BouncingScrollPhysics(),
